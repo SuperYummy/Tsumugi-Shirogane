@@ -9,9 +9,8 @@ const error_occurred = new MessageEmbed()
     .setDescription
     (
         `\`\`\`It seems like this command is unusable at the moment.\`\`\``
-           + `\`\`\`\n\nI'll let the bot developer know about this.\`\`\``
+        + `\`\`\`\n\nI'll let the bot developer know about this.\`\`\``
     );
 
+module.exports = { error_occurred }
 
-
-module.exports = error_occurred

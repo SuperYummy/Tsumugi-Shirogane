@@ -1,5 +1,6 @@
 const { Command } = require('discord.js-commando');
-const Oops = require(`./error`);
+const  { error_occurred } = require(`../../utils/error`);
+const { manage_messages, member_needs_to_be_admin } = require(`../../utils/permission`);
 
 module.exports = class SayCommand extends Command {
     constructor(client) {
@@ -12,14 +13,14 @@ module.exports = class SayCommand extends Command {
             argsType: `multiple`,
         });
 
-    };
+    }
 
-    run(message, args) {
+    async run(message, args) {
 
-        const { member, author, guild } = message
+        if (member_needs_to_be_admin(message)) return;
+        if (manage_messages(message)) return;
 
-        if (!member.hasPermission(`ADMINISTRATOR`)) return message.say(`You need the "Administrator" permission for this command.`);
-        if (!guild.me.hasPermission(`ADMINISTRATOR` && `MANAGE_MESSAGES`)) return message.reply(`I need one of the following permissions for the \`say\` command to work:\n- Administrator\n- Manage messages`); 
+        const { author } = message
 
         try {
 
@@ -31,7 +32,7 @@ module.exports = class SayCommand extends Command {
         } catch (err) {
 
             console.error(err);
-            message.say(Oops);
+            message.say(error_occurred);
 
         };
     };
