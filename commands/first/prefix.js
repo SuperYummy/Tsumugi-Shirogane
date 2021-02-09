@@ -7,6 +7,7 @@ module.exports = class SayCommand extends Command {
             name: 'abcdefghijklmnopqrstuvwxyz',
             group: 'first',
             memberName: 'abcdefghijklmnopqrstuvwxyz',
+            description: `abc`,
             argsType: `multiple`,
         });
 

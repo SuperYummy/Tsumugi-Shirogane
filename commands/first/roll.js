@@ -11,7 +11,7 @@ module.exports = class SayCommand extends Command {
             aliases: ['die', 'dice'],
             group: 'first',
             memberName: 'roll',
-            description: 'Replies with the text you provide.',
+            description: 'Roll a random number equal to and below a certain number.',
             argsType: `multiple`,
         });
 

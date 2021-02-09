@@ -5,7 +5,7 @@ const { MessageEmbed } = require('discord.js');
  * I saved all of Tsumugi's sprites (except the spoiler ones) to the "attachment/sprites" folder from this link:
  * https://danganronpa.fandom.com/wiki/Tsumugi_Shirogane/Sprite_Gallery
  * 
- * I editted and cropped them so they look good on Discord.
+ * I edited and cropped them so they look good on Discord.
 */
 
 const sad_expression = function () {

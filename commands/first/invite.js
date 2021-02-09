@@ -16,8 +16,6 @@ module.exports = class SayCommand extends Command {
 
     };
 
-    //https://discord.com/oauth2/authorize?client_id=806207784210530354&scope=bot&permissions=8
-
 
     run(message, args) {
 
