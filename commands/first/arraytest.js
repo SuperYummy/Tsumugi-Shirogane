@@ -1,14 +1,14 @@
 const { Command } = require('discord.js-commando');
 const { MessageEmbed } = require(`discord.js`)
 const { error_occurred } = require(`../../utils/error`);
-const { I_need_permission } = require(`../../utils/error`);
+const { show_letters_used, show_hangman } = require(`../../utils/specification/hangman`);
 
 
 module.exports = class SayCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'test',
-            aliases: ['testest', 'testet'],
+            name: 'Hangman',
+            aliases: ['gambit'],
             group: 'first',
             memberName: 'test',
             description: 'testestestest',
@@ -16,77 +16,272 @@ module.exports = class SayCommand extends Command {
 
     };
 
-    /**
-     * 
-     * I need to learn how  to loop for this command
-     */
+    async run(message, args) {
 
-
-    run(message, args) {
         try {
 
-        
-            //   let x = [`1`, `2`]
+            function pick_a_word() {
 
-            let hidden = [`_`, `_`, `_`, `_`, `_`, `_`, `_`, `_`, `_`, `_`, `_`]
+                const available_words_to_solve =
+                    [
+                        `Hope`,
+                        `Despair`,
+                        `Ultimate talent`,
+                        `Hair`,
+                        `Trigger Happy Havoc`,
+                        `Goodbye Despair`,
+                        `Killing Harmony`,
+                        `Mastermind`,
+                        `Class trial`,
+                        `Blackened`,
+                        `Handbook`,
+                        `Monocoins`,
+                        `Accomplice`,
+                        `Jabberock Island`,
+                        `Orange juice`,
+                        `Seesaw`,
+                        `Blackened`,
+                        `Cospox`,
+                        `Alter ego`,
+                        `Future Foundation`,
+                        `Blackened`,
+                        `Ultra Despair Girls`,
+                        `Blackened`,
+                        `MonoMono machine`,
+                        `Execution`,
+                        `Punishment`,
+                        `Sparkling Justice`,
+                        `Blackened`,
+                        // =========== Talents
+                        // A
+                        `Adventurer`,
+                        `Affluent progeny`,
+                        `Aikido Master`,
+                        `Animator`,
+                        `Analayst`,
+                        `Anthropologist`,
+                        `Artist`,
+                        `Assassin`,
+                        `Astronaut`,
+                        // B
+                        `Baseball star`,
+                        `Blacksmith`,
+                        `Biker gang leader`,
+                        `Bodyguard`,
+                        `Botaanst`,
+                        `Boxer`,
+                        `Breeder`,
+                        // C
+                        `Child caregiver`,
+                        `Clairvoyant`,
+                        `Confectioner`,
+                        `Cook`,
+                        `Cosplayer`,
+                        // D
+                        `Detective`,
+                        // E
+                        `Entomologist`,
+                        // F
+                        `Fanfic creator`,
+                        `Farmer`,
+                        `Fashionishta`,
+                        // G
+                        `Gambler`,
+                        `Gamer`,
+                        `Gymnast`,
+                        // H
+                        `Housekeeper`,
+                        // I
+                        `Imposter`,
+                        `Inventor`,
+                        // L
+                        `Lucky Student`,
+                        // M
+                        `Magician`,
+                        `Maid`,
+                        `Martial artist`,
+                        /** `Make-Up Artist`,*/
+                        `Mechanic`,
+                        // H
+                        `Hall monitor`,
+                        /** `Multiple Birth Sibling`,*/
+                        `Serial killer`,
+                        `Musician`,
+                        `Neuorologist`,
+                        `Nurse`,
+                        `Pharmacist`,
+                        `Photographer`,
+                        `Physicist`,
+                        `Pianist`,
+                        `Idol`,
+                        `Princess`,
+                        `Programmer`,
+                        `Pyrotechnician`,
+                        `Robot`,
+                        `Secret agent`,
+                        `Secretary`,
+                        `Soldier`,
+                        `Street fighter`,
+                        `Student council president`,
+                        `Supreme leader`,
+                        `Survivor`,
+                        `Swimmer`,
+                        `Swordswoman`,
+                        `Coach`,
+                        `Tennis pro`,
+                        `THerapist`,
+                        `Traditional dancer`,
+                        `Wrestler`,
+                        `Writing prodigy`,
+                        `Yakuza`,
 
-            let guesses = 0
-            while (guesses < 2) {
-             
 
-                const filter = m => m.author.id === message.author.id
-                message.channel.awaitMessages(filter, { max: 1, time: 1000 * 60, errors: ['timeout'] }).then(() => {
+                    ]
+                return available_words_to_solve[Math.floor(Math.random() * available_words_to_solve.length)];
 
-                    console.log(`ok`)
-                    message.channel.send(`hi`)
-                    guess++
-                })
             }
 
+            const word = pick_a_word() // example: plain
+            const capitalised_all_letters = word.toUpperCase() // example: plain => PLAIN
+            const split_all_letters_from_each_other_into_array = capitalised_all_letters.split(``) // example: PLAIN => [`P`, `L`, `A`, `I`, `N`]
+            const array_of_letters = split_all_letters_from_each_other_into_array // example: [`P`, `L`, `A`, `I`, `N`]
+            console.log(array_of_letters)
 
+            let hidden = []
+            array_of_letters.forEach((letter) => {
 
-            return
-            for (let guesses = 0; guesses < 6;) {
+                if (letter == ` `) return hidden.push(` `)
+                hidden.push(`_`)
+            })
 
-                const letter_gussed = args[0]
+            console.log(hidden)
 
-                const filter = m => m.author.id === message.author.id
-                message.channel.awaitMessages(filter, { max: 1, time: 1000 * 60, errors: ['timeout'] }).then((args) => {
+            let letters_that_have_been_guessed = [``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``, ``]
 
+            let guesses = 0;
+            const no_more_letters_to_guessed_now = 999;
 
-                    const array_of_letters = [`P`, `L`, `A`, `I`, `N`, `A`, `R`, `I`, `U`, `M`, `A`]
+            const hangman_beginning = new MessageEmbed()
+                .setColor('#e5b3b5')
+                .setTitle(`Hangman Gambit`)
+                .setDescription
+                (
+                /**/  `\`\`\`${hidden.join(` `)}\`\`\``
+                    + `\`\`\`${show_hangman(guesses)}\`\`\``
 
-                    function ok(letter) {
+                    + `\`\`\`letters guessed: ${letters_that_have_been_guessed.join(` `)}\`\`\``)
 
-                        if ((array_of_letters.some(array => letter.toUpperCase().includes(array)))) {
+            message.say(hangman_beginning).then(async game => {
 
-                            let letter_has_been_found = array_of_letters
+                while (guesses <= 6) {
 
-                            array_of_letters.forEach(letter => {
+                    const hidden_word_has_been_completed = !hidden.includes(`_`);
 
-                                if (letter == letter_gussed) {
+                    if (hidden_word_has_been_completed) {
 
-                                    const index_of_found_letter = letter_has_been_found.indexOf(letter)
-                                    console.log(index_of_found_letter)
-                                    letter_has_been_found[index_of_found_letter] = `-`
-                                    hidden[index_of_found_letter] = letter
+                        const letters_remaining_to_guess = hidden.join(` `)
 
-                                } else guesses++
+                        const congratulation = new MessageEmbed()
+                            .setColor('#e5b3b5')
+                            .setTitle(`Hangman Gambit`)
+                            .setDescription
+                            (
+                                /**/  `\`\`\`${letters_remaining_to_guess}\`\`\``
+                                + `\`\`\`${show_hangman(guesses)}\`\`\``
 
-                            })
+                                + `\`\`\`letters guessed:`
+                                + `${letters_that_have_been_guessed.join(` `)}\`\`\``
 
-                            console.log(letter_has_been_found)
-                            console.log(hidden)
-                        }
+                                + `\`\`\`Congratulation, friend.\`\`\``
+                            )
 
-                        return hidden[letter] = args[0]
+                        game.edit(congratulation)
+
+                        break;
+
                     }
 
-                    ok(letter_gussed)
-                })
-            }
+                    const filter = m => m.author.id === message.author.id
+                    await message.channel.awaitMessages(filter, { max: 1, time: 1000 * 60, errors: ['timeout'] }).then((message) => {
+
+                        message = message.first()
+                        const array_of_words_from_message_content = message.content.split(` `)
+                        const letter_guessed = array_of_words_from_message_content.shift().toUpperCase()
+                        function ok(letter) {
+
+                            const hidden_word_has_the_letter_guessed = (array_of_letters.some(array => letter.toUpperCase().includes(array)))
+
+                            if (hidden_word_has_the_letter_guessed) {
+
+                                let letter_has_been_found = array_of_letters
+
+                                array_of_letters.forEach(letter => {
+
+                                    if (letter == letter_guessed) {
+
+                                        const index_of_found_letter = letter_has_been_found.indexOf(letter)
+                                        console.log(index_of_found_letter)
+                                        letter_has_been_found[index_of_found_letter] = `!`
+
+                                        hidden[index_of_found_letter] = letter
+
+                                    }
+
+                                })
+
+                            } else guesses++
+
+                        }
+
+                        ok(letter_guessed)
+
+                        const letters_remaining_to_guess = hidden.join(` `)
 
 
+
+                        show_letters_used(letter_guessed, letters_that_have_been_guessed)
+
+                        //show_letters_used(letter_guessed, letters_that_have_been_guessed)
+
+                        if (guesses <= 6) {
+                            const hangman_progress = new MessageEmbed()
+                                .setColor('#e5b3b5')
+                                .setTitle(`Hangman Gambit`)
+                                .setDescription(
+                    /**/  `\`\`\`${letters_remaining_to_guess}\`\`\``
+                                    + `\`\`\`${show_hangman(guesses)}\`\`\``
+
+                                    + `\`\`\`letters guessed:`
+                                    + `${letters_that_have_been_guessed.join(` `)}\`\`\``)
+
+                            game.edit(hangman_progress) && message.delete()
+
+                        }
+                        else {
+
+                            const nice_try = new MessageEmbed()
+                                .setColor('#e5b3b5')
+                                .setTitle(`Hangman Gambit`)
+                                .setDescription
+                                (
+                                /**/  `\`\`\`The word was: ${word.toUpperCase()}\`\`\``
+                                    + `\`\`\`${show_hangman(guesses)}\`\`\``
+
+                                    + `\`\`\`letters guessed: ${letters_that_have_been_guessed.join(` `)}\`\`\``
+
+                                    + `\`\`\`Nice try, friend.\`\`\``
+                                )
+
+                            game.edit(nice_try)
+
+                        }
+                    })
+                }
+
+
+
+
+            });
 
 
             return
