@@ -74,7 +74,7 @@ module.exports = class SayCommand extends Command {
 
                     }
 
-                    const filter = m => m.author.id === message.author.id // The bot won't responds to other users' answers
+                    const filter = m => m.author.id === message.author.id // The bot won't respond to other users' answers
                     await message.channel.awaitMessages(filter, { max: 1, time: 1000 * 60, errors: ['timeout'] }).then((message) => {
 
                         if (message) {
