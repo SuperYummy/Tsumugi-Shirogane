@@ -15,7 +15,8 @@ const client = new CommandoClient({
 client.registry
   .registerDefaultTypes()
   .registerGroups([
-    ['first', 'Your First Command Group']
+    ['first', 'random commands'],
+    ['string', 'playing with strings']
   ])
   .registerDefaultGroups()
   .registerDefaultCommands({
